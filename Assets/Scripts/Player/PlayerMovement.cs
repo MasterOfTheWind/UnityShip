@@ -36,6 +36,7 @@ public class PlayerMovement : MonoBehaviour{
         moveArround(playerPositionH, playerPositionV, MovementSpeed);
         rotationLook(playerPositionH, playerPositionV, LookSpeed);
         horizontalLean(playerModel, playerPositionH, 50, .1f);
+        travelForward();
 
     }
 
@@ -58,6 +59,10 @@ public class PlayerMovement : MonoBehaviour{
         transform.localPosition += new Vector3(x, y, 0) * speed * Time.deltaTime;
         lockPositionInsideCamera();
 
+    }
+
+    private void travelForward(){
+        transform.parent.position += new Vector3(0, 0, TravelSpeed) * Time.deltaTime;
     }
 
     private void lockPositionInsideCamera() {
