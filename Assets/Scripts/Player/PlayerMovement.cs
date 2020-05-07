@@ -23,25 +23,36 @@ public class PlayerMovement : MonoBehaviour{
     private Transform playerModel;
 
 
-    private void Awake()
-    {
+    private void Awake(){
         playerModel = transform.GetChild(0);
     }
 
     void Update(){
-        float h = Input.GetAxis("Horizontal");
-        float v = Input.GetAxis("Vertical");
+        processInput();
+        movePlayer();
+    }
 
-
-        moveArround(h, v, MovementSpeed);
-        RotationLook(h, v, LookSpeed);
-        HorizontalLean(playerModel, h, 50, .1f);
-
-
-
+    private void movePlayer(){
+        moveArround(playerPositionH, playerPositionV, MovementSpeed);
+        rotationLook(playerPositionH, playerPositionV, LookSpeed);
+        horizontalLean(playerModel, playerPositionH, 50, .1f);
 
     }
 
+    private void processInput(){
+        mapAxisToPosition();
+        processButtons();
+        
+    }
+
+    private void mapAxisToPosition(){
+        playerPositionH = Input.GetAxis("Horizontal");
+        playerPositionV = Input.GetAxis("Vertical");
+    }
+
+    private void processButtons(){
+
+    }
 
     private void moveArround(float x, float y, float speed){
         transform.localPosition += new Vector3(x, y, 0) * speed * Time.deltaTime;
@@ -57,26 +68,23 @@ public class PlayerMovement : MonoBehaviour{
 
     }
 
-    void RotationLook(float h, float v, float speed)
-    {
+    private void rotationLook(float h, float v, float speed){
         aimTarget.parent.position = Vector3.zero;
         aimTarget.localPosition = new Vector3(h, v, 1);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(aimTarget.position), Mathf.Deg2Rad * speed * Time.deltaTime);
     }
 
-    private void OnDrawGizmos()
-    {
+    
+    private void horizontalLean(Transform target, float axis, float leanLimit, float lerpTime){
+        Vector3 targetEulerAngels = target.localEulerAngles;
+        target.localEulerAngles = new Vector3(targetEulerAngels.x, targetEulerAngels.y, Mathf.LerpAngle(targetEulerAngels.z, -axis * leanLimit, lerpTime));
+    }
+
+    private void OnDrawGizmos(){
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(aimTarget.position, .5f);
         Gizmos.DrawSphere(aimTarget.position, .15f);
 
     }
-
-    void HorizontalLean(Transform target, float axis, float leanLimit, float lerpTime)
-    {
-        Vector3 targetEulerAngels = target.localEulerAngles;
-        target.localEulerAngles = new Vector3(targetEulerAngels.x, targetEulerAngels.y, Mathf.LerpAngle(targetEulerAngels.z, -axis * leanLimit, lerpTime));
-    }
-
 
 }
