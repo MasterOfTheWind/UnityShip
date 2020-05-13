@@ -9,7 +9,8 @@ public class ShootBullet : MonoBehaviour
 
     
     void Update(){
-        processInput();
+        if(!Pause.GameIsPaused)
+            processInput();
     }
 
     private void processInput(){

@@ -40,8 +40,10 @@ public class PlayerMovement : MonoBehaviour{
 
     [System.Obsolete]
     void Update(){
-        processInput();
-        movePlayer();
+        if (!Pause.GameIsPaused) { 
+            processInput();
+            movePlayer();
+        }
     }
 
 
