@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class Pause : MonoBehaviour
@@ -16,6 +17,9 @@ public class Pause : MonoBehaviour
             
             else
                 pauseGame();
+        if (Input.GetButtonDown("Cancel"))
+            if (GameIsPaused)
+                ResumeGame();
     }
 
 
@@ -32,5 +36,6 @@ public class Pause : MonoBehaviour
 
     public void QuitGame(){
         Application.Quit();
+        EditorApplication.isPlaying = false;
     }
 }
